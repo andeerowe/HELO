@@ -14,9 +14,10 @@ module.exports = {
         if (!foundUser){res.status(404).send('Incorrect username or password')} else {res.status(200).send(foundUser)}
     },
     getPosts: async (req,res) => {
-        const {userId} = req.params
+        let {userId} = req.params
+        userId = +userId
         const {myPosts, search} = req.query
-        console.log(myPosts, search, userId)
+        console.log(myPosts, search, typeof(userId))
         const db = req.app.get('db')
 
         let posts = await db.get_posts()
