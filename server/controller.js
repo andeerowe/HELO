@@ -16,20 +16,40 @@ module.exports = {
     getPosts: async (req,res) => {
         const {userId} = req.params
         const {myPosts, search} = req.query
+        console.log(myPosts, search, userId)
         const db = req.app.get('db')
 
         let posts = await db.get_posts()
-        // res.status(200).send(posts)
 
         let matchingPosts = []
 
         if(myPosts && search){
+            console.log('hit 1')
             for(let i = 0; i < posts.length; i++){
                 if(posts[i].title.includes(search)){
                     matchingPosts.push(posts[i])
                 }
             }
             res.status(200).send(matchingPosts)
+        } else if(myPosts ==='false' && !search){
+            console.log('hit 2')
+            for(let i = 0; i < posts.length; i++){
+                if(posts[i].id !== userId){
+                    matchingPosts.push(posts[i])
+                }
+            }
+            res.status(200).send(matchingPosts)
+        } else if(myPosts === 'false' && search){
+            console.log('hit 3')
+            for(let i = 0; i < posts.length; i++){
+                if(posts[i].author_id !== userId && posts[i].title.includes(search)){
+                    matchingPosts.push(posts[i])
+                }
+            }
+            res.status(200).send(matchingPosts)
+        } else {
+            console.log('hit 4')
+            res.status(200).send(posts)
         }
 
 

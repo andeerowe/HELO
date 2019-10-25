@@ -1,13 +1,15 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import {connect} from 'react-redux'
 
 class Dashboard extends Component {
     constructor (){
         super()
 
         this.state = {
-            search: 'a',
-            myPosts: true,
+            search: '',
+            myPosts: false,
+            userId: 1,
             posts: [
                 {
                     title: 'fake',
@@ -33,7 +35,7 @@ class Dashboard extends Component {
 
     search = () => {
         console.log('search hit')
-        axios.get(`/api/posts?myPosts=${true}&search=${'a'}`,)
+        axios.get(`/api/posts/${this.state.userId}?myPosts=${this.state.myPosts}&search=${this.state.search}`,)
         .then(res => {
             console.log('hit', res.data)
             // if(res.data)
@@ -52,16 +54,18 @@ class Dashboard extends Component {
             this.setState({
                 myPosts: false
             })
-            console.log(this.state.myPosts)
+            // console.log(this.state.myPosts)
         } else {
             this.setState({
                 myPosts: true
             })
-            console.log(this.state.myPosts)
+            
         }
     }
 
     render(){
+        console.log(this.state.userId)
+        console.log(this.state.myPosts)
         return(
             <div>
                 Dashboard
@@ -86,4 +90,10 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard
+const mapStateToProps = reduxState => {
+    return {
+        userId: reduxState.userId
+    }
+}
+
+export default connect(mapStateToProps)(Dashboard)

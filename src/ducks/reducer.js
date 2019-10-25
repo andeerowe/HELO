@@ -1,6 +1,6 @@
 const initialState = {
     username: 'a',
-    userId: 'b',
+    userId: '2',
     profilePic:'c'
 }
 const UPDATE_USER = 'UPDATE_USER'

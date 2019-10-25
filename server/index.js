@@ -18,7 +18,7 @@ const port = 4040
 app.post('/auth/register', ctrl.registerUser)
 app.post('/auth/login', ctrl.login)
 
-app.get('/api/posts', ctrl.getPosts)
+app.get('/api/posts/:userId', ctrl.getPosts)
 
 app.listen(port, console.log(`Running on ${port}`))
 
