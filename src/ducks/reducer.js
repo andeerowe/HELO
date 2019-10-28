@@ -1,12 +1,12 @@
 const initialState = {
-    username: 'a',
-    userId: '2',
-    profilePic:'c'
+    username: '',
+    userId: 0,
+    profilePic:''
 }
 const UPDATE_USER = 'UPDATE_USER'
 
 export function updateUser(userObj){
-    console.log('action function hit')
+    console.log('action function hit', userObj)
     return {
         type: UPDATE_USER,
         payload: userObj

@@ -32,6 +32,7 @@ class Auth extends Component {
         }
             
         )
+        .catch(err => console.log('Register Failed', err))
         
     }
 

@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
+import './dashboard.css'
 
 class Dashboard extends Component {
     constructor (){
@@ -9,36 +10,21 @@ class Dashboard extends Component {
         this.state = {
             search: '',
             myPosts: false,
-            userId: 1,
-            posts: [
-                {
-                    title: 'fake',
-                    author: 'fake',
-                    profilePic: 'fake',
-                    postContent: 'fake'
-                },
-                {
-                    title: 'fake',
-                    author: 'fake',
-                    profilePic: 'fake',
-                    postContent: 'fake'
-                },
-                {
-                    title: 'fake',
-                    author: 'fake',
-                    profilePic: 'fake',
-                    postContent: 'fake'
-                }
-            ]
+            // userId: 0,
+            posts: []
         }
     }
-
+    componentDidMount = () => {
+        this.search()
+    }
     search = () => {
         console.log('search hit')
-        axios.get(`/api/posts/${this.state.userId}?myPosts=${this.state.myPosts}&search=${this.state.search}`,)
+        axios.get(`/api/posts/${this.props.userId}?myPosts=${this.state.myPosts}&search=${this.state.search}`,)
         .then(res => {
             console.log('hit', res.data)
-            // if(res.data)
+            this.setState({
+                posts: res.data
+            })
         })
         .catch(err => console.log('NOOOO', err))
     }
@@ -47,6 +33,7 @@ class Dashboard extends Component {
         this.setState({
             search: value
         })
+        
     }
 
     toggleCheck = () => {
@@ -63,25 +50,41 @@ class Dashboard extends Component {
         }
     }
 
+    resetSearch = () => {
+        axios.get(`/api/posts/${this.props.userId}?myPosts=${this.state.myPosts}`,)
+        .then(res => {
+            console.log('hit', res.data)
+            this.setState({
+                posts: res.data,
+                search: ''
+            })
+        })
+        .catch(err => console.log('NOOOO', err))
+    }
+
     render(){
-        console.log(this.state.userId)
-        console.log(this.state.myPosts)
+        console.log(this.props.userId)
+        // console.log(this.state.myPosts)
+        // console.log(this.state.search)
         return(
             <div>
-                Dashboard
-                <input onChange={e => this.handleSearchChange(e.target.value)}/>
+                <h4>Search by Title: </h4>
+                <input value={this.state.search} onChange={e => this.handleSearchChange(e.target.value)}/>
                 <button onClick={() => this.search()}>Search</button>
-                <button>Reset</button>
-                My Posts:
+                <button onClick={ () => this.resetSearch()}>Reset</button>
+                <br/>
+                Include My Posts:
                 <input type="checkbox" onChange={() => this.toggleCheck()}/>
-                <h2>Posts</h2>
+                <h3>POSTS</h3>
+                {/* userId:{this.props.userId} */}
                 {this.state.posts.map((e, i) => {
                     return (
-                        <div key={i}>
-                            {e.title}
-                            {e.author}
-                            {e.profilePic}
-                            {e.postContent}
+                        <div className="post-container" key={i}>
+                            Post Title: {e.title}
+                            <br />
+                            Post Author: {e.username}
+                            <br />
+                            Post Content: {e.content}
                         </div>
                     )
                 })}
